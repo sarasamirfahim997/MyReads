@@ -31,7 +31,6 @@ const Search = () => {
         }
     );
     setDataAfterModification(() => modifiedBooks);
-    console.log(dataAfterModification);
   }, [dispatch, queryInput, searchResults]);
   return (
     <div className={classes.search}>

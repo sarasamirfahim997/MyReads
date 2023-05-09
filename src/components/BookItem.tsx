@@ -29,7 +29,7 @@ const BookItem: React.FC<shelfProps> = (props) => {
   return (
     <>
       {data.length === 0 || !data ? (
-        "No book details To Display"
+        <p data-testid="no-book">"No book details To Display"</p>
       ) : (
         <div
           className={classes.bookItem}

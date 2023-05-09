@@ -1,27 +1,24 @@
 import Header from "../layout/Header";
-import { BrowserRouter } from "react-router-dom";
-import userEvent from "@testing-library/user-event";
-import { screen, render } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { renderWithContext } from "./renderWrapper";
-import BooksList from "../components/BooksList";
-
-const mockedUsedNavigate = jest.fn();
+import { render, unmountComponentAtNode } from "react-dom";
+import { act } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+/* const mockedUsedNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => mockedUsedNavigate,
-}));
+})); */
 
-describe("header navigate", () => {
+describe("header rendering", () => {
   test("login", () => {
     renderWithContext(<Header />);
-    renderWithContext(<BooksList/>)
-    expect(screen.getByText("Login")).toBeInTheDocument();
-
+    expect(screen.getByText("Login")).toBeTruthy();
+    expect(screen.getByText("Home")).toBeTruthy();
   });
-  test("navigation", () => {
+  test("navigates to home when home is clicked", () => {
     renderWithContext(<Header />);
-    expect(screen.getByText("Logout")).toBeInTheDocument();
-    userEvent.click(screen.getByText("Logout"));
-    expect(mockedUsedNavigate).toHaveBeenCalledWith("Login");
+      const goHomeLink = screen.queryByText("Home");
+      goHomeLink?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
   });
 });

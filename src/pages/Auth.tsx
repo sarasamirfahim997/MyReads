@@ -10,13 +10,13 @@ const Auth = () => {
     dispatch(AuthActions.login());
   };
   return (
-    <main className={classes.auth}>
+    <main className={classes.auth} data-testid="auth">
       <section>
         {!isAuth && !localStorage.getItem("logged") ? (
           <form onSubmit={loginHandler}>
             <div className={classes.control}>
               <label htmlFor="email">Email</label>
-              <input type="email" required id="email" />
+              <input type="email" aria-label="email" required id="email" />
             </div>
             <div className={classes.control}>
               <label htmlFor="password">Password</label>
@@ -24,6 +24,7 @@ const Auth = () => {
                 type="password"
                 required
                 id="password"
+                aria-label="password"
               />
             </div>
             <button>Login</button>

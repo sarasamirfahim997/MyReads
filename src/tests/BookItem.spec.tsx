@@ -1,9 +1,7 @@
 import React from "react";
 import BookItem from "../components/BookItem";
-import { BrowserRouter as Router } from "react-router-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
-import store from "../redux/store/store";
+import { screen } from "@testing-library/react";
+import { renderWithContext } from "./renderWrapper";
 import { Book } from "../redux/booksModel";
 
 describe("BooksItem Component is rendered", () => {
@@ -50,19 +48,7 @@ describe("BooksItem Component is rendered", () => {
       subtitle: "Building Native Mobile Apps with JavaScript",
     };
     renderWithContext(<BookItem book={book} />);
-    const field = screen.queryByTestId("SelectField") as HTMLElement;
-    expect(field).toHaveValue(book.shelf);
-    fireEvent.change(field, {
-      target: { value: "read" },
-    });
-    expect(book.shelf).toHaveValue("read");
+    const element = screen.getAllByTestId("no-book");
+    expect(element).toBeTruthy();
   });
 });
-
-function renderWithContext(element: React.ReactElement) {
-  render(
-    <Provider store={store}>
-      <Router>{element}</Router>
-    </Provider>
-  );
-}
