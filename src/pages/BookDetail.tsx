@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../redux/store/store";
 import { getBook } from "../redux/helper";
@@ -12,17 +12,34 @@ type bookIdParams = {
   bookId: string;
 };
 
+const BOOK = {
+  id: "",
+  authors: [""],
+  title: "",
+  description: "",
+  imageLinks: {
+    smallThumbnail: "",
+    thumbnail: "",
+  },
+  shelf: "",
+  subtitle: "",
+};
 const BookDetail = () => {
-  const { searchResults, loading } = useAppSelector<BooksState>((state) => state.books);
+  const [state, setState] = useState<Book[]>([BOOK]);
+  const { searchResults, loading, data } = useAppSelector<BooksState>(
+    (state) => state.books
+  );
   const dispatch = useAppDispatch();
   const { bookId } = useParams<bookIdParams>();
 
   useEffect(() => {
     if (bookId) dispatch(getBook(bookId));
+    setState(() => searchResults.concat(data));
   }, [dispatch, bookId]);
-  const book: Book[] = searchResults.filter((book) => book.id === bookId);
+
   const loadingIsTrue = <Loader />;
-  const dataNotAvailable = !searchResults || searchResults.length === 0;
+  const dataNotAvailable = !state || state.length === 0;
+  console.log("State: ", state);
   return (
     <div className={classes["book-detail"]}>
       {loading ? (
@@ -33,19 +50,19 @@ const BookDetail = () => {
         <>
           <div className={classes["book-cover"]}>
             <img
-              src={book[0].imageLinks ? book[0].imageLinks.thumbnail : dummyImg}
-              alt={book[0].title}
+              src={state[0].imageLinks ? state[0].imageLinks.thumbnail : dummyImg}
+              alt={state[0].title}
             />
           </div>
           <div className={classes["book-titles"]}>
-            <h3>{book[0].title}</h3>
-            <h5>{book[0].subtitle}</h5>
+            <h3>{state[0].title}</h3>
+            <h5>{state[0].subtitle}</h5>
           </div>
           <div className="book-detail-desc">
-            <p> {book[0].description}</p>
+            <p> {state[0].description}</p>
           </div>
           <div className="book-detail-authors">
-            <p>By: {book[0].authors.join(" & ")}</p>
+            <p>By: {state[0].authors.join(" & ")}</p>
           </div>
         </>
       )}

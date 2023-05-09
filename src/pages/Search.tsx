@@ -23,7 +23,6 @@ const Search = () => {
 
   useEffect(() => {
     dispatch(getBooksData());
-    console.log(searchResults);
     const modifiedBooks = searchResults.map(
       (searchBook: Book) =>
         data.find((book) => book.id === searchBook?.id) || {
