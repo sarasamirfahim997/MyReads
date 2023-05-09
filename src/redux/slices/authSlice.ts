@@ -3,7 +3,7 @@ export interface AuthState {
   isAuth: boolean;
 }
 
-const initialAuthState: AuthState = {
+export const initialAuthState: AuthState = {
   isAuth: false,
 };
 

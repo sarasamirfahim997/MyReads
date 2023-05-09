@@ -8,7 +8,13 @@ const store = configureStore({
     auth: authSlice.reducer,
   },
 });
-
+export function getStoreWithState(preloadedState?: RootState) {
+  const reducer = {
+    books: booksSlice.reducer,
+    auth: authSlice.reducer,
+  };
+  return configureStore({ reducer, preloadedState });
+}
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
