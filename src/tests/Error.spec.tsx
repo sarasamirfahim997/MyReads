@@ -1,10 +1,10 @@
 import { screen } from "@testing-library/react";
-import { renderWithContext } from "./renderWrapper";
+import { renderWithProviders } from "./renderWrapper";
 import Error from "../pages/Error";
 
 describe("Error rendering", () => {
   test("rendering", () => {
-    renderWithContext(<Error />);
+    renderWithProviders(<Error />);
     expect(screen.getAllByText("404 | Page Not Found")).toBeTruthy();
   });
 

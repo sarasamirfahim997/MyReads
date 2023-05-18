@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import classes from "./Search.module.css";
 import { useAppDispatch, useAppSelector } from "../redux/store/store";
-import { Book, BooksState } from "../redux/booksModel";
+import { Book, BooksState, Shelves } from "../redux/booksModel";
 import BookItem from "../components/BookItem";
 import { getBooksData, searchForBooks } from "../redux/helper";
 
@@ -17,21 +17,37 @@ const Search = () => {
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQueryInput(event.target.value);
-    dispatch(searchForBooks(event.target.value));
-    if (queryInput.trim().length === 0) dispatch(searchForBooks(""));
   };
 
   useEffect(() => {
-    dispatch(getBooksData());
+    const timeout = setTimeout(() => {
+      if (queryInput.trim().length !== 0) {
+        dispatch(searchForBooks(queryInput));
+      } else {
+        setDataAfterModification([]);
+      }
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [dispatch, queryInput]);
+
+  useEffect(() => {
     const modifiedBooks = searchResults.map(
       (searchBook: Book) =>
         data.find((book) => book.id === searchBook?.id) || {
           ...searchBook,
-          shelf: "none",
+          shelf: Shelves.none,
         }
     );
     setDataAfterModification(() => modifiedBooks);
-  }, [dispatch, queryInput, searchResults]);
+  }, [searchResults]);
+
+  useEffect(() => {
+    dispatch(getBooksData());
+  }, [dispatch]);
+
   return (
     <div className={classes.search}>
       <div className={classes.input}>

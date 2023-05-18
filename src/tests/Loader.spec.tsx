@@ -1,12 +1,12 @@
 import { screen} from "@testing-library/react";
-import { renderWithContext } from "./renderWrapper";
+import { renderWithProviders } from "./renderWrapper";
 import Loader from "../layout/Loader";
 
 
 
 describe("Loader rendering", () => {
     test("rendering", () => {
-      renderWithContext(<Loader />);
+      renderWithProviders(<Loader />);
       expect(screen.getByTestId("loaderComponentId")).toBeTruthy();
     });
   });

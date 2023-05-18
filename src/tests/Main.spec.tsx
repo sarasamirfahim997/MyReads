@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/react";
-import { renderWithContext } from "./renderWrapper";
+import { renderWithProviders } from "./renderWrapper";
 import Main from "../pages/Main";
 import BooksList from "../components/BooksList";
 import Loader from "../layout/Loader";
@@ -9,9 +9,9 @@ import Loader from "../layout/Loader";
 
 describe("Main rendering", () => {
   test("rendering without any api calls", () => {
-    renderWithContext(<Main />);
-    renderWithContext(<BooksList />);
-    renderWithContext(<Loader />);
+    renderWithProviders(<Main />);
+    renderWithProviders(<BooksList />);
+    renderWithProviders(<Loader />);
     expect(screen.getByTestId("loaderComponentId")).toBeTruthy();
   });
 });

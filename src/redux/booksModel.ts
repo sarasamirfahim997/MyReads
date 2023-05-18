@@ -2,28 +2,34 @@ type images = {
   smallThumbnail: string;
   thumbnail: string;
 };
-export type shelf = string;
+//export type shelf = string;
 
+export enum Shelves {
+  read = "read",
+  currentlyReading = "currentlyReading",
+  wantToRead = "wantToRead",
+  none = "none",
+}
 export interface Book {
   id: string;
   authors: string[];
   title: string;
   description: string;
   imageLinks: images;
-  shelf: shelf;
+  shelf: Shelves;
   subtitle: string;
 }
 
-export interface updatedBookType {
+export interface UpdatedBookType {
   book: Book;
-  shelf: shelf;
+  shelf: Shelves;
 }
 
-export interface responseInterface {
-  currentlyReading: shelf;
-  read: shelf;
-  wantToRead: shelf;
-  book: updatedBookType;
+export interface ResponseInterface {
+  currentlyReading: Shelves.currentlyReading;
+  read: Shelves.read;
+  wantToRead: Shelves.wantToRead;
+  book: UpdatedBookType;
 }
 
 export interface BooksState {

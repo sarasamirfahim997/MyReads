@@ -1,16 +1,16 @@
 import { screen} from "@testing-library/react";
-import { renderWithContext } from "./renderWrapper";
+import { renderWithProviders } from "./renderWrapper";
 import Auth from "../pages/Auth";
 
 
 
 describe("Auth rendering", () => {
     test("rendering", () => {
-      renderWithContext(<Auth />);
+      renderWithProviders(<Auth />);
       expect(screen.getByTestId("auth")).toBeTruthy();
     });
     test("form input",()=>{
-      renderWithContext(<Auth />);
+      renderWithProviders(<Auth />);
       expect(screen.getByLabelText('Email')).toBeTruthy();
       
     })

@@ -1,12 +1,11 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/store/store";
 import { getBooksData } from "../redux/helper";
-import { Book, BooksState, SHELVES } from "../redux/booksModel";
+import { Book, BooksState, SHELVES, Shelves } from "../redux/booksModel";
 import BookShelf from "./BookShelf";
 import classes from "./BooksList.module.css";
 import Loader from "../layout/Loader";
-import { Link } from "react-router-dom";
-import { ImSearch } from "react-icons/im";
+import SearchButton from "../layout/SearchButton";
 
 const BooksList = () => {
   const { data } = useAppSelector<BooksState>((state) => state.books);
@@ -30,7 +29,7 @@ const BooksList = () => {
           return (
             <BookShelf
               key={shelf.id}
-              shelf={shelf.id}
+              shelf={Shelves[shelf.id as keyof typeof Shelves]}
               books={shelfBooks}
               title={shelf.title}
               onRenderShelf={renderShelf}
@@ -38,15 +37,7 @@ const BooksList = () => {
           );
         })
       )}
-      <Link
-        to="/search"
-        //state={{ shelfBooks: shelfBooks }}
-        className={classes["search-button"]}
-      >
-        <div>
-          <ImSearch fontSize="larger" />
-        </div>
-      </Link>
+      <SearchButton />
     </div>
   );
 };

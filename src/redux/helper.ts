@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getAll, search, get } from "../BooksAPI";
-import { Book, responseInterface, updatedBookType } from "./booksModel";
+import { Book, ResponseInterface, UpdatedBookType } from "./booksModel";
 import { update } from "../BooksAPI";
 
 export const getBooksData = createAsyncThunk(
@@ -21,8 +21,8 @@ export const getBook = createAsyncThunk(
 
 export const updateBookShelf = createAsyncThunk(
   "update/book",
-  async (book: updatedBookType): Promise<responseInterface> => {
-    const response: responseInterface = await update(book.book, book.shelf);
+  async (book: UpdatedBookType): Promise<ResponseInterface> => {
+    const response: ResponseInterface = await update(book.book, book.shelf);
     return { ...response, book };
   }
 );
@@ -30,7 +30,6 @@ export const updateBookShelf = createAsyncThunk(
 export const searchForBooks = createAsyncThunk(
   "search/books",
   async (query: string): Promise<[Book] | []> => {
-    console.log(query)
     if (query.trim().length === 0) {
       return [];
     } else {

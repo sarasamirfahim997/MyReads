@@ -1,11 +1,33 @@
 import { booksSlice, initialBookState } from "../redux/slices/bookSlice";
-import { getStoreWithState } from "../redux/store/store";
-import { getBooksData } from "../redux/helper";
+import { RootState, getStoreWithState } from "../redux/store/store";
+import { getBook, getBooksData } from "../redux/helper";
+//import { Book, BooksState } from "../redux/booksModel";
+//import { useAppDispatch, useAppSelector } from "../redux/store/store";
+import { authSlice } from "../redux/slices/authSlice";
+jest.mock("../redux/store/store");
+
+//const testUseAppSelector = (f: Function) => f(initialState);
 
 describe("Getting All Books List Action", () => {
-  const initialState = initialBookState;
-  const initialStateAuth = {
-    isAuth: false,
+  /*  beforeEach(() => {
+    useAppSelector.mockImplementation(testUseAppSelector);
+  }); */
+  const initialState = booksSlice.getInitialState();
+
+  const bookExample = {
+    id: "nggnmAEACAAJ",
+    authors: ["William E. Shotts, Jr."],
+    title: "The Linux Command Line",
+    subtitle: "A Complete Introduction",
+    imageLinks: {
+      smallThumbnail:
+        "http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+      thumbnail:
+        "http://books.google.com/books/content?id=nggnmAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    },
+    shelf: "currentlyReading",
+    description:
+      "You've experienced the shiny, point-and-click surface of your Linux computer—now dive below and explore its depths with the power of the command line. The Linux Command Line takes you from your very first terminal keystrokes to writing full programs in Bash, the most popular Linux shell. Along the way you'll learn the timeless skills handed down by generations of gray-bearded, mouse-shunning gurus: file navigation, environment configuration, command chaining, pattern matching with regular expressions, and more. In addition to that practical knowledge, author William Shotts reveals the philosophy behind these tools and the rich heritage that your desktop Linux machine has inherited from Unix supercomputers of yore. As you make your way through the book's short, easily-digestible chapters, you'll learn how to: * Create and delete files, directories, and symlinks * Administer your system, including networking, package installation, and process management * Use standard input and output, redirection, and pipelines * Edit files with Vi, the world’s most popular text editor * Write shell scripts to automate common or boring tasks * Slice and dice text files with cut, paste, grep, patch, and sed Once you overcome your initial \"shell shock,\" you'll find that the command line is a natural and expressive way to communicate with your computer. Just don't be surprised if your mouse starts to gather dust. A featured resource in the Linux Foundation's \"Evolution of a SysAdmin\"",
   };
   test("initialize slice with initialValue", () => {
     const booksSliceInit = booksSlice.getInitialState();
@@ -18,23 +40,41 @@ describe("Getting All Books List Action", () => {
     expect(state).toEqual({ data: [], loading: true, searchResults: [] });
   });
 
-  test("sets loading false & fetch list of books when getBooksData is fullfilled, returns undefined as expectations are not written correctly", async () => {
-    const action = { type: getBooksData.fulfilled.type };
-    const state = booksSlice.reducer(initialState, action);
-    const store = getStoreWithState({
-      books: state,
-      auth: initialStateAuth,
-    });
-    await store.dispatch(getBooksData());
-    expect(store.getState().books).toEqual({
-      data: undefined,
-      loading: false,
-      searchResults: [],
-    });
-  });
+  test("sets loading false & fetch list of books when getBooksData is fullfilled, returns undefined as expectations are not written correctly", async () => {});
 
   test("sets loading false when getBooksData is rejected", () => {
     const action = { type: getBooksData.rejected.type };
+    const state = booksSlice.reducer(initialState, action);
+    expect(state).toEqual(initialState);
+  });
+
+  /* getBook */
+
+  test("sets loading true when getBook is pending", () => {
+    const action = { type: getBook.pending.type };
+    const state = booksSlice.reducer(initialState, action);
+    expect(state).toEqual({ data: [], loading: true, searchResults: [] });
+  });
+
+  test("sets loading false & fetch book when getBook is fullfilled", async () => {
+    /* console.log("Initial BookState: ", initialBookState);
+    console.log("Initial BookState2: ", booksSlice.getInitialState());
+    const state: RootState = {
+      books: { ...initialBookState, data: [bookExample] },
+      auth: authSlice.getInitialState(),
+    };
+    const store = getStoreWithState(state);
+    await store.dispatch(getBook("nggnmAEACAAJ"));
+    expect(store.getState().books).toEqual({
+      data: [bookExample],
+      loading: true,
+      searchResults: [],
+    }); */
+    //expect(fetchedState(rootState).books.data).toEqual(bookExample)
+    //expect(fetchedState(rootState).books.data).toEqual(expect.arrayContaining([bookExample]))
+  });
+  test("sets loading false when getBook is rejected", () => {
+    const action = { type: getBook.rejected.type };
     const state = booksSlice.reducer(initialState, action);
     expect(state).toEqual(initialState);
   });

@@ -18,5 +18,6 @@ export function getStoreWithState(preloadedState?: RootState) {
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
+export type AppStore = ReturnType<typeof getStoreWithState>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export default store;

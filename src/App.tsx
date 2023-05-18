@@ -16,7 +16,7 @@ const route = createBrowserRouter([
       { path: "/login", element: <Auth /> },
       { path: "/books/:bookId/details", element: <BookDetail /> },
     ],
-    errorElement: <Root outlet={<Error />} />,
+    errorElement: <Root errPage={<Error />} />,
   },
 ]);
 

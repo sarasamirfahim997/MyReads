@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classes from "./BookItem.module.css";
 import { useAppDispatch, useAppSelector } from "../redux/store/store";
-import { BooksState } from "../redux/booksModel";
+import { BooksState, Shelves } from "../redux/booksModel";
 import { Book } from "../redux/booksModel";
 import { updateBookShelf } from "../redux/helper";
 import { Link } from "react-router-dom";
@@ -12,19 +12,25 @@ interface shelfProps {
 }
 
 const BookItem: React.FC<shelfProps> = (props) => {
+  const { shelf, id, imageLinks, title, authors } = props.book;
   const [selectedOption, setSelectedOption] = useState<string>(
-    props.book.shelf ? props.book.shelf : "none"
+    shelf ? shelf : "none"
   );
   const { data } = useAppSelector<BooksState>((state) => state.books);
   const dispatch = useAppDispatch();
   const selectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(event.target.value);
-    dispatch(updateBookShelf({ book: props.book, shelf: event.target.value }));
+    dispatch(
+      updateBookShelf({
+        book: props.book,
+        shelf: Shelves[event.target.value as keyof typeof Shelves],
+      })
+    );
   };
 
   const dragStartHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    event.dataTransfer.setData("text", props.book.id);
+    event.dataTransfer.setData("text", id);
   };
   return (
     <>
@@ -35,22 +41,15 @@ const BookItem: React.FC<shelfProps> = (props) => {
           className={classes.bookItem}
           draggable="true"
           onDrag={dragStartHandler}
-          data-testid={props.book.id}
+          data-testid="to-book-detail"
         >
-          <Link to={`/books/${props.book.id}/details`}>
+          <Link to={`/books/${id}/details`} data-testid="to-book-detail">
             <div className={classes["book-cover"]}>
-              <img
-                src={
-                  props.book.imageLinks
-                    ? props.book.imageLinks.thumbnail
-                    : dummyImg
-                }
-                alt=""
-              />
+              <img src={imageLinks ? imageLinks.thumbnail : dummyImg} alt="" />
             </div>
-            <div className={classes["book-title"]}>{props.book.title}</div>
+            <div className={classes["book-title"]}>{title}</div>
             <div className={classes["book-authors"]}>
-              By: {props.book.authors && props.book.authors.join(", ")}
+              By: {authors && authors.join(", ")}
             </div>
           </Link>
           <div className={classes["book-shelf-changer"]}>
@@ -62,10 +61,12 @@ const BookItem: React.FC<shelfProps> = (props) => {
               <option value="none" disabled>
                 Move to...
               </option>
-              <option value="currentlyReading">Currently Reading</option>
-              <option value="wantToRead">Want to Read</option>
-              <option value="read">Read</option>
-              <option value="none">None</option>
+              <option value={Shelves.currentlyReading}>
+                Currently Reading
+              </option>
+              <option value={Shelves.wantToRead}>Want to Read</option>
+              <option value={Shelves.read}>Read</option>
+              <option value={Shelves.none}>None</option>
             </select>
           </div>
         </div>

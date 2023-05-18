@@ -5,7 +5,7 @@ import {
   searchForBooks,
   updateBookShelf,
 } from "../helper";
-import { responseInterface, BooksState, Book } from "../booksModel";
+import { ResponseInterface, BooksState, Book } from "../booksModel";
 
 export const initialBookState: BooksState = {
   loading: false,
@@ -59,11 +59,10 @@ export const booksSlice = createSlice({
     });
     builder.addCase(
       updateBookShelf.fulfilled,
-      (state, action: PayloadAction<responseInterface>) => {
+      (state, action: PayloadAction<ResponseInterface>) => {
+        const { book, shelf } = action.payload.book;
         state.data.map((changedBook) =>
-          changedBook.id === action.payload.book.book.id
-            ? (changedBook.shelf = action.payload.book.shelf)
-            : changedBook
+          changedBook.id === book.id ? (changedBook.shelf = shelf) : changedBook
         );
         state.loading = false;
       }

@@ -6,7 +6,7 @@ let token = localStorage.token;
 
 if (!token) token = localStorage.token = Math.random().toString(36).substr(-8);
 
-const headers = {
+export const headers = {
   Accept: "application/json",
   Authorization: token,
 };
@@ -42,3 +42,7 @@ export const search = (query: string, maxResults?: number) =>
   })
     .then((res) => res.json())
     .then((data) => data.books);
+export function getBook(bookId: string) {
+    throw new Error("Function not implemented.");
+}
+
